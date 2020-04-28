@@ -15,9 +15,10 @@ _word=$( [ ${MYSQL_ADMIN_PASS} ] && echo "preset" || echo "random" )
 echo "=> Creating MySQL admin user with ${_word} password"
 
 mysql -uroot -e "CREATE USER 'admin'@'%' IDENTIFIED BY '$PASS'"
+echo "=> GRANT ALL PRIVILEGES"
 mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION"
-
-mysql -uroot -e " GRANT ALL PRIVILEGES ON phpmyadmin.* TO  'pma'@'localhost' IDENTIFIED BY ''"
+# echo "=> GRANT ALL PRIVILEGES ON phpmyadmin"
+# mysql -uroot -e " GRANT ALL PRIVILEGES ON phpmyadmin.* TO  'pma'@'localhost' IDENTIFIED BY ''"
 
 CREATE_MYSQL_USER=false
 
@@ -33,6 +34,7 @@ if [ "$CREATE_MYSQL_USER" = true ]; then
     _userdb=${MYSQL_USER_DB:-db}
     _userpass=${MYSQL_USER_PASS:-password}
 
+    echo "=> CREATE CUSTOM USER"
     mysql -uroot -e "CREATE USER '${_user}'@'%' IDENTIFIED BY  '${_userpass}'"
     mysql -uroot -e "GRANT USAGE ON *.* TO  '${_user}'@'%' IDENTIFIED BY '${_userpass}'"
     mysql -uroot -e "CREATE DATABASE IF NOT EXISTS ${_userdb}"
