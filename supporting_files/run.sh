@@ -22,7 +22,7 @@ function replace_apache_php_ini_values () {
     sed -ri -e "s/^upload_max_filesize.*/upload_max_filesize = ${PHP_UPLOAD_MAX_FILESIZE}/" \
         -e "s/^post_max_size.*/post_max_size = ${PHP_POST_MAX_SIZE}/" /etc/php/$1/apache2/php.ini
 
-    sed -i "s/;date.timezone =/date.timezone = Europe\/London/g" /etc/php/$1/apache2/php.ini
+    sed -i "s/;date.timezone =/date.timezone = Europe\/Paris/g" /etc/php/$1/apache2/php.ini
 
 }
 if [ -e /etc/php/5.6/apache2/php.ini ]; then replace_apache_php_ini_values "5.6"; fi
@@ -38,7 +38,7 @@ if [ -e /etc/php/$PHP_VERSION/apache2/php.ini ]; then replace_apache_php_ini_val
 #   None
 #######################################
 function replace_cli_php_ini_values () {
-    sed -i  "s/;date.timezone =/date.timezone = Europe\/London/g" /etc/php/$1/cli/php.ini
+    sed -i  "s/;date.timezone =/date.timezone = Europe\/Paris/g" /etc/php/$1/cli/php.ini
 }
 if [ -e /etc/php/5.6/cli/php.ini ]; then replace_cli_php_ini_values "5.6"; fi
 if [ -e /etc/php/$PHP_VERSION/cli/php.ini ]; then replace_cli_php_ini_values $PHP_VERSION; fi
@@ -48,6 +48,7 @@ sed -i "s/export APACHE_RUN_GROUP=www-data/export APACHE_RUN_GROUP=staff/" /etc/
 if [ -n "$APACHE_ROOT" ];then
     rm -f /var/www/html && ln -s "/app/${APACHE_ROOT}" /var/www/html
 fi
+rm -f /var/www/html && ln -s "/app/sinapsecloud/public" /var/www/html
 
 sed -i "s/cfg\['blowfish_secret'\] = ''/cfg['blowfish_secret'] = '`date | md5sum`'/" /var/www/phpmyadmin/config.inc.php
 
@@ -64,7 +65,7 @@ if [ -n "$VAGRANT_OSX_MODE" ];then
 else
     # Tweaks to give Apache/PHP write permissions to the app
     chown -R www-data:staff /var/www
-    chown -R www-data:staff /app
+    # chown -R www-data:staff /app
 fi
 
 chown -R www-data:staff /var/lib/mysql
