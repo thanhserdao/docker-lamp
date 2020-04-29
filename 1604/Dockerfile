@@ -28,7 +28,7 @@ RUN add-apt-repository -y ppa:ondrej/php && \
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C && \
   apt-get update && \
   apt-get -o Dpkg::Options::="--force-confnew" --force-yes -fuy upgrade && \
-  apt-get -y install postfix supervisor wget git apache2 php-xdebug libapache2-mod-php mysql-server php-mysql pwgen php-apcu php-gd php-xml php-mbstring php-gettext zip unzip php-zip curl php-curl && \
+  apt-get -y install postfix supervisor wget git apache2 php7.3 php7.3-cli php7.3-common php7.3-xdebug libapache2-mod-php7.3 mysql-server php7.3-mysql pwgen php7.3-apcu php7.3-gd php7.3-xml php7.3-mbstring php7.3-gettext zip unzip php7.3-zip curl php7.3-curl && \
   apt-get -y autoremove && \
   echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
@@ -49,7 +49,7 @@ ADD supporting_files/create_mysql_users.sh /create_mysql_users.sh
 
 # Add phpmyadmin
 RUN wget -O /tmp/phpmyadmin.tar.gz https://files.phpmyadmin.net/phpMyAdmin/${PHPMYADMIN_VERSION}/phpMyAdmin-${PHPMYADMIN_VERSION}-all-languages.tar.gz
-RUN tar xfvz /tmp/phpmyadmin.tar.gz -C /var/www
+RUN tar xfz /tmp/phpmyadmin.tar.gz -C /var/www
 RUN ln -s /var/www/phpMyAdmin-${PHPMYADMIN_VERSION}-all-languages /var/www/phpmyadmin
 RUN mv /var/www/phpmyadmin/config.sample.inc.php /var/www/phpmyadmin/config.inc.php
 
